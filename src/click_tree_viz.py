@@ -4,9 +4,10 @@ from copy import deepcopy
 from dataclasses import dataclass
 from typing import Union, Dict, Any, List, Optional
 
-from click import Group, MultiCommand, Command
+from click import Group, MultiCommand
 from treelib.tree import Tree
 
+from traversal_utils import recurse
 
 @dataclass
 class _ClickNode:
@@ -29,12 +30,12 @@ class _ClickNode:
     @property
     def parent_path(self) -> str:
         if len(self.route) > 1:
-            return '.'.join(self.route[:-1])
+            return ".".join(self.route[:-1])
         return self.route[0]
 
     @property
     def path(self) -> str:
-        return '.'.join(self.route)
+        return ".".join(self.route)
 
     def as_dict(self):
         return self.__dict__
@@ -43,7 +44,7 @@ class _ClickNode:
 class ClickTreeViz:
     def __init__(self, click_stuct: Union[MultiCommand, Group]):
         self._raw_struct = deepcopy(click_stuct)
-        self._clean_struct = traverse_down(self._raw_struct)
+        self._clean_struct = recurse(self._raw_struct)
         self.tree = self._as_tree(self._clean_struct)
         self._graphviz = None
 
@@ -51,17 +52,15 @@ class ClickTreeViz:
     def _as_tree(struct: List[_ClickNode]):
         # Use tree lib to take clean struct and hold in memory
         working_tree = Tree()
-        working_tree.create_node(tag='CLI', identifier='CLI', data='🌴')
+        working_tree.create_node(tag="CLI", identifier="CLI", data="🌴")
         for leaf in struct:
-            try:
-                working_tree.create_node(
-                    tag=leaf.name,
-                    identifier=leaf.path,
-                    data=leaf.as_dict(),
-                    parent='CLI' if leaf.is_root else leaf.parent_path
-                )
-            except:
-                breakpoint()
+
+            working_tree.create_node(
+                tag=leaf.name,
+                identifier=leaf.path,
+                data=leaf.as_dict(),
+                parent="CLI" if leaf.is_root else leaf.parent_path,
+            )
 
         return working_tree
 
@@ -87,47 +86,3 @@ class ClickTreeViz:
 
     def print(self):
         return self.tree.show()
-
-
-def traverse_down(
-        click_structure: Union[Dict[str, Any], Command, Group, MultiCommand],
-        current_path: List[Any] = None,
-        all_paths: List[Any] = None,
-) -> List[_ClickNode]:
-    if current_path is None and all_paths is None:
-        current_path = []
-        all_paths = []
-
-    def _as_dict(obj: Union[Dict[str, Any], Command, Group]) -> Union[Dict[str, Any]]:
-        """Aids recursion so that we are always working with dictionaries"""
-        if hasattr(obj, "commands"):
-            return obj.commands
-        elif isinstance(obj, dict):
-            return obj
-        else:
-            return {}
-
-    def _is_group(obj: Union[Group, Command, MultiCommand]) -> bool:
-        return isinstance(obj, Group) and hasattr(obj, "commands")
-
-    def _get_params(obj: Union[Group, Command, MultiCommand]) -> List[Dict[str, Any]]:
-        return [x.opts for x in obj.params]
-
-    for clean_name, click_obj in _as_dict(click_structure).items():
-        all_paths.append(
-            _ClickNode(
-                name=clean_name,
-                route=current_path + [clean_name],
-                is_group=_is_group(click_obj),
-                params=_get_params(click_obj),
-                help=click_obj.help,
-            )
-        )
-
-        # Recurse down
-        traverse_down(
-            click_structure=_as_dict(click_obj),
-            current_path=(current_path + [clean_name]),
-            all_paths=all_paths,
-        )
-    return all_paths
