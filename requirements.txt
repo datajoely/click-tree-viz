@@ -1,0 +1,4 @@
+rich==10.1.0
+click==7.1.2
+treelib==1.6.1
+pytest==6.2.3
