@@ -1,44 +1,12 @@
 import io
 from contextlib import redirect_stdout
 from copy import deepcopy
-from dataclasses import dataclass
-from typing import Union, Dict, Any, List, Optional
+from typing import Union, Dict, Any, List
 
 from click import Group, MultiCommand
 from treelib.tree import Tree
 
 from traversal_utils import recurse
-
-@dataclass
-class _ClickNode:
-    name: str
-    route: List[str]
-    params: List[Dict[str, Any]]
-    is_group: bool
-    help: Optional[str] = None
-
-    @property
-    def is_root(self) -> bool:
-        return len(self.route) <= 1
-
-    @property
-    def parent_name(self) -> str:
-        if len(self.route) > 1:
-            return self.route[-2]
-        return self.route[0]
-
-    @property
-    def parent_path(self) -> str:
-        if len(self.route) > 1:
-            return ".".join(self.route[:-1])
-        return self.route[0]
-
-    @property
-    def path(self) -> str:
-        return ".".join(self.route)
-
-    def as_dict(self):
-        return self.__dict__
 
 
 class ClickTreeViz:
@@ -49,12 +17,11 @@ class ClickTreeViz:
         self._graphviz = None
 
     @staticmethod
-    def _as_tree(struct: List[_ClickNode]):
+    def _as_tree(struct: List[Any]):
         # Use tree lib to take clean struct and hold in memory
         working_tree = Tree()
         working_tree.create_node(tag="CLI", identifier="CLI", data="🌴")
         for leaf in struct:
-
             working_tree.create_node(
                 tag=leaf.name,
                 identifier=leaf.path,
