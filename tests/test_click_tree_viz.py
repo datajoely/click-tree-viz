@@ -12,17 +12,18 @@ def test_naval():
     tree.boring_print()  # prove this works without error
     dict_data = tree.to_dict()
     assert len(dict_data.keys()) == 1
-    assert set(
-        [list(x.keys())[0] for x in dict_data['CLI']['children']]
-    ) == {'mine', 'ship'}
+    assert set([list(x.keys())[0] for x in dict_data["CLI"]["children"]]) == {
+        "mine",
+        "ship",
+    }
 
     assert json.dumps(tree.to_dict()) == tree.to_json()
 
     graph_viz = tree.to_graphviz()
-    assert graph_viz.count('->') == 7
+    assert graph_viz.count("->") == 21
 
 
 def test_naval_rich_tree():
     naval_cli = naval.cli
     tree = ClickTreeViz(naval_cli)
-    build_rich_tree(tree.treelib)
+    build_rich_tree(tree.treelib_obj)
