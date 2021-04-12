@@ -27,18 +27,11 @@ class ClickNode:
         return len(self.route) <= 1
 
     @property
-    def parent_name(self) -> str:
-        """The name of the object directly above this one in the CLI tree"""
-        if len(self.route) > 1:
-            return self.route[-2]
-        return self.route[0]
-
-    @property
     def parent_path(self) -> str:
         """The route to the object directly above this one in the CLI tree"""
         if len(self.route) > 1:
             return ".".join(self.route[:-1])
-        return self.route[0]
+        return self.route[0]  # pragma: no cover
 
     @property
     def path(self) -> str:

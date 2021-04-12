@@ -1,3 +1,5 @@
+# pylint:disable=inconsistent-return-statements
+
 """
 This module provides a class to visualise Click CLI structures
 """
@@ -10,8 +12,8 @@ from typing import Union, Dict, Any, List
 import treelib
 
 from click import Group, MultiCommand
-from rich_utils import build_rich_tree
-from click_utils import recurse_click_cli, ClickNode
+from src.rich_utils import build_rich_tree
+from src.click_utils import recurse_click_cli, ClickNode
 
 
 class ClickTreeViz:
@@ -113,7 +115,10 @@ class ClickTreeViz:
     def rich_print(self, return_object: bool = False):
         """Converts treelib structure to rich.tree.Tree object
         and prints it to the console"""
-        build_rich_tree(self.treelib_obj, return_obj=return_object)
+
+        result = build_rich_tree(self.treelib_obj, return_obj=return_object)
+        if return_object:
+            return result
 
     @staticmethod
     def _extend_leaf_params(treelib_obj: treelib.tree.Tree) -> treelib.tree.Tree:

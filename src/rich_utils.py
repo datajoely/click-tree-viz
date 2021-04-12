@@ -1,3 +1,4 @@
+# pylint:disable=inconsistent-return-statements
 """
 This module provides utilities for building out a complex rich tree representation
 of a Click cli object
@@ -133,12 +134,10 @@ def _find_or_create_node(
         # iterate through the children and check for target; BASE CASE 1
         for child in rich_tree.children:
             if _resolve_name(child, renderable_lookup) == new_node_id:
-                return child
+                return child  # pragma: no cover
 
         # the parent has bee found, but the child does not exist; BASE CASE 2
-        rich_renderable = _make_rich_renderable(
-            node_id=new_node_id, cli_tree=cli_tree
-        )
+        rich_renderable = _make_rich_renderable(node_id=new_node_id, cli_tree=cli_tree)
 
         # store rich panel lookup for complex objects
         renderable_lookup[str(rich_renderable)] = new_node_id
@@ -190,7 +189,7 @@ def build_rich_tree(
             # Get node object with metadata
             working_node = cli_tree.nodes[node]
             _find_or_create_node(
-                parent_node_id=working_node.bpointer,
+                parent_node_id=working_node.predecessor(cli_tree.identifier),
                 new_node_id=working_node.identifier,
                 cli_tree=cli_tree,
                 rich_tree=rich_tree,

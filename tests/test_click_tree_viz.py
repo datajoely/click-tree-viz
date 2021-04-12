@@ -3,11 +3,9 @@ This module tests the click tree visualisation
 """
 import json
 
+from src.click_tree_viz import ClickTreeViz
 from .examples.naval import naval
 from .examples.termui import termui
-
-from click_tree_viz import ClickTreeViz
-from rich_utils import build_rich_tree
 
 
 def test_naval_cli():
@@ -25,12 +23,14 @@ def test_naval_cli():
 
     graph_viz = tree.to_graphviz()
     assert graph_viz.count("->") == 21
+    graph_viz_2 = tree.to_graphviz()
+    assert graph_viz == graph_viz_2
 
 
 def test_naval_rich_tree():
     naval_cli = naval.cli
     tree_obj = ClickTreeViz(naval_cli)
-    rich_obj = build_rich_tree(tree_obj.treelib_obj, return_obj=True)
+    rich_obj = tree_obj.rich_print(return_object=True)
     tree_dict = tree_obj.to_dict()
     assert len(tree_dict['CLI'].keys()) == len(rich_obj.children)
     assert set([list(x.keys())[0] for x in tree_dict["CLI"]["children"]]) == set(
@@ -162,3 +162,5 @@ def test_termui_cli():
         }
     }
     assert expected == processed
+
+    tree.rich_print()  # prove this works without error
