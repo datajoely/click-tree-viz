@@ -57,8 +57,8 @@ def _as_dict(cli_obj: Union[Dict[str, Any], Command, Group]) -> Union[Dict[str, 
 
     if isinstance(cli_obj, dict):
         return cli_obj
-    else:
-        return {}
+
+    return {}
 
 
 def _is_group(cli_obj: Union[Group, Command, MultiCommand]) -> bool:
