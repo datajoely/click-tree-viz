@@ -35,8 +35,10 @@ class ClickTreeViz:
         self._list_leaf_nodes = recurse_click_cli(click_structure=self._raw_struct)
 
         # Convert to treelib.tree.Tree structure
-        self.treelib_obj = self._as_tree(node_sequence=self._list_leaf_nodes)
-        self.treelib_obj_params = self._extend_leaf_params(treelib_obj=self.treelib_obj)
+        self._treelib_obj = self._as_tree(node_sequence=self._list_leaf_nodes)
+        self._treelib_obj_params = self._extend_leaf_params(
+            treelib_obj=self._treelib_obj
+        )
 
         # Graphviz method provided by treelib yields once only
         self._graphviz_cached = None
@@ -66,13 +68,38 @@ class ClickTreeViz:
 
         return working_tree
 
+    @staticmethod
+    def _extend_leaf_params(treelib_obj: treelib.tree.Tree) -> treelib.tree.Tree:
+        """Add parameters and commands to the tree structure"""
+
+        # Copy so working with different reference
+        working_treelib_obj = deepcopy(treelib_obj)
+
+        # Iterate over each node
+        for node in treelib_obj.nodes:
+            # Retrieve node object
+            working_node = treelib_obj[node]
+            # Filter to nodes with data property
+            if working_node.data is not None:
+                params = working_node.data.get("params", [])
+                for param in params:
+                    # Join any multi-options
+                    opts = ",".join(param["opts"])
+                    # Add to copied tree
+                    working_treelib_obj.create_node(
+                        identifier=working_node.identifier + "." + opts,
+                        tag=f'[{param["type"]}] {opts}',
+                        parent=node,
+                    )
+        return working_treelib_obj
+
     def to_dict(self, **kwargs) -> Dict[str, Any]:
         """Uses treelib to convert nodes to a dictionary structure"""
-        return self.treelib_obj.to_dict(with_data=True, **kwargs)
+        return self._treelib_obj.to_dict(with_data=True, **kwargs)
 
     def to_json(self, **kwargs) -> str:
         """Uses treelib to convert nodes to a JSON structure"""
-        return self.treelib_obj.to_json(with_data=True, **kwargs)
+        return self._treelib_obj.to_json(with_data=True, **kwargs)
 
     def to_graphviz(
         self, shape: str = "plain", layout_dir: str = "LR", **kwargs
@@ -98,7 +125,7 @@ class ClickTreeViz:
         # treelib graphviz writes once to stdout
         stream = io.StringIO()
         with redirect_stdout(stream):
-            self.treelib_obj_params.to_graphviz(shape=shape, **kwargs)
+            self._treelib_obj_params.to_graphviz(shape=shape, **kwargs)
         output = stream.getvalue()
 
         # Replace closing } tag with layout condition
@@ -108,39 +135,14 @@ class ClickTreeViz:
         self._graphviz_cached = output_with_layout
         return self._graphviz_cached
 
-    def boring_print(self, **kwargs):
+    def print(self, **kwargs):
         """Uses built in treelib print function"""
-        return self.treelib_obj_params.show(**kwargs)
+        return self._treelib_obj_params.show(**kwargs)
 
     def rich_print(self, return_object: bool = False):
         """Converts treelib structure to rich.tree.Tree object
         and prints it to the console"""
 
-        result = build_rich_tree(self.treelib_obj, return_obj=return_object)
+        result = build_rich_tree(self._treelib_obj, return_obj=return_object)
         if return_object:
             return result
-
-    @staticmethod
-    def _extend_leaf_params(treelib_obj: treelib.tree.Tree) -> treelib.tree.Tree:
-        """Add parameters and commands to the tree structure"""
-
-        # Copy so working with different reference
-        working_treelib_obj = deepcopy(treelib_obj)
-
-        # Iterate over each node
-        for node in treelib_obj.nodes:
-            # Retrieve node object
-            working_node = treelib_obj[node]
-            # Filter to nodes with data property
-            if working_node.data is not None:
-                params = working_node.data.get("params", [])
-                for param in params:
-                    # Join any multi-options
-                    opts = ",".join(param["opts"])
-                    # Add to copied tree
-                    working_treelib_obj.create_node(
-                        identifier=working_node.identifier + "." + opts,
-                        tag=f'[{param["type"]}] {opts}',
-                        parent=node,
-                    )
-        return working_treelib_obj

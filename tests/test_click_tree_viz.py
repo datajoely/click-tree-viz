@@ -11,7 +11,7 @@ from .examples.termui import termui
 def test_naval_cli():
     naval_cli = naval.cli
     tree = ClickTreeViz(naval_cli)
-    tree.boring_print()  # prove this works without error
+    tree.print()  # prove this works without error
     dict_data = tree.to_dict()
     assert len(dict_data.keys()) == 1
     assert set([list(x.keys())[0] for x in dict_data["CLI"]["children"]]) == {

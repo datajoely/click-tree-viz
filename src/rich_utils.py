@@ -14,7 +14,7 @@ from rich.table import Table
 from rich.text import Text
 from rich.tree import Tree as RichTree
 
-COLOURS = {"group": "[yellow]", "argument": "[red]", "option": "[magenta]"}
+COLOURS = {"group": "[yellow]", "argument": "[cyan]", "option": "[magenta]"}
 
 ICONS = {"command": "⚙️", "group": "📂", "tree": "🌴"}
 
@@ -61,6 +61,7 @@ def _make_rich_renderable(node_id: str, cli_tree: treelib.Tree) -> ConsoleRender
         return Panel.fit(
             renderable=RenderGroup(
                 Text(text, no_wrap=True, overflow="ellipsis", style="bold"),
+                '\n',
                 Table(
                     *headers,
                     show_lines=False,
