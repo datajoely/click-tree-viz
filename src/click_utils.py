@@ -54,7 +54,8 @@ def _as_dict(cli_obj: Union[Dict[str, Any], Command, Group]) -> Union[Dict[str, 
     """Aids recursion so that recursion focuses on dictionary objects"""
     if hasattr(cli_obj, "commands"):
         return cli_obj.commands
-    elif isinstance(cli_obj, dict):
+
+    if isinstance(cli_obj, dict):
         return cli_obj
     else:
         return {}

@@ -82,7 +82,7 @@ def _make_rich_renderable(node_id: str, cli_tree: treelib.Tree) -> ConsoleRender
         return first_col, Text(second_col, no_wrap=True, overflow="ellipsis")
 
     # If any params have 'help' key
-    includes_help = any([x.get("help", False) for x in params])
+    includes_help = any(x.get("help", False) for x in params)
     if params and includes_help:
         component = _new_param_tbl(desc=title, text=cmd_desc, headers=["param", "desc"])
     # If params are present without any help key

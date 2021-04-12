@@ -1,3 +1,6 @@
+"""
+This module tests the click tree visualisation
+"""
 import json
 
 from .examples.naval import naval
