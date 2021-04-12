@@ -82,7 +82,8 @@ def _make_rich_renderable(node_id: str, cli_tree: treelib.Tree) -> ConsoleRender
         return first_col, Text(second_col, no_wrap=True, overflow="ellipsis")
 
     # If any params have 'help' key
-    if params and any([x.get("help", False) for x in params]):
+    includes_help = any([x.get("help", False) for x in params])
+    if params and includes_help:
         component = _new_param_tbl(desc=title, text=cmd_desc, headers=["param", "desc"])
     # If params are present without any help key
     elif params:
@@ -133,18 +134,18 @@ def _find_or_create_node(
         for child in rich_tree.children:
             if _resolve_name(child, renderable_lookup) == new_node_id:
                 return child
-        else:
-            # the parent has bee found, but the child does not exist; BASE CASE 2
-            rich_renderable = _make_rich_renderable(
-                node_id=new_node_id, cli_tree=cli_tree
-            )
 
-            # store rich panel lookup for complex objects
-            renderable_lookup[str(rich_renderable)] = new_node_id
+        # the parent has bee found, but the child does not exist; BASE CASE 2
+        rich_renderable = _make_rich_renderable(
+            node_id=new_node_id, cli_tree=cli_tree
+        )
 
-            # Add to rich hierarchy
-            new_rich_tree = rich_tree.add(rich_renderable, highlight=False)
-            return new_rich_tree
+        # store rich panel lookup for complex objects
+        renderable_lookup[str(rich_renderable)] = new_node_id
+
+        # Add to rich hierarchy
+        new_rich_tree = rich_tree.add(rich_renderable, highlight=False)
+        return new_rich_tree
 
     # Keep recursing until we find the parent
     for child in rich_tree.children:
@@ -155,11 +156,12 @@ def _find_or_create_node(
             cli_tree=cli_tree,
             renderable_lookup=renderable_lookup,
         )
+    return rich_tree
 
 
 def build_rich_tree(
     cli_tree: treelib.Tree, return_obj: bool = False
-) -> Optional[ConsoleRenderable]:
+) -> Optional[RichTree]:
     """
     This method takes a treelib Tree structure constructed by processing the click
     object and then converts this to a richly formatted object that can be printed
@@ -201,3 +203,4 @@ def build_rich_tree(
 
         # Print to the console
         Console().print(rich_tree)
+        return None

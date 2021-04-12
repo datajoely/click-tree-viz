@@ -113,7 +113,7 @@ class ClickTreeViz:
     def rich_print(self, return_object: bool = False):
         """Converts treelib structure to rich.tree.Tree object
         and prints it to the console"""
-        build_rich_tree(self._as_tree, return_obj=return_object)
+        build_rich_tree(self.treelib_obj, return_obj=return_object)
 
     @staticmethod
     def _extend_leaf_params(treelib_obj: treelib.tree.Tree) -> treelib.tree.Tree:
