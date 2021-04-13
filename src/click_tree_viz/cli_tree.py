@@ -12,8 +12,9 @@ from typing import Union, Dict, Any, List
 import treelib
 
 from click import Group, MultiCommand
-from src.rich_utils import build_rich_tree
-from src.click_utils import recurse_click_cli, ClickNode
+
+from click_tree_viz.click_utils import ClickNode, recurse_click_cli
+from click_tree_viz.rich_utils import build_rich_tree
 
 
 class ClickTreeViz:

@@ -3,7 +3,7 @@ This module tests the click tree visualisation
 """
 import json
 
-from src.click_tree_viz import ClickTreeViz
+from click_tree_viz import ClickTreeViz
 from .examples.naval import naval
 from .examples.termui import termui
 
@@ -82,7 +82,7 @@ def test_termui_cli():
                     "locate": {
                         "data": {
                             "help": "Opens a file or URL In the "
-                            "default application.",
+                                    "default application.",
                             "is_group": False,
                             "name": "locate",
                             "params": [
@@ -107,7 +107,7 @@ def test_termui_cli():
                     "open": {
                         "data": {
                             "help": "Opens a file or URL In the "
-                            "default application.",
+                                    "default application.",
                             "is_group": False,
                             "name": "open",
                             "params": [
