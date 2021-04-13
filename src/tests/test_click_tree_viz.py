@@ -32,7 +32,7 @@ def test_naval_rich_tree():
     tree_obj = ClickTreeViz(naval_cli)
     rich_obj = tree_obj.rich_print(return_object=True)
     tree_dict = tree_obj.to_dict()
-    assert len(tree_dict['CLI'].keys()) == len(rich_obj.children)
+    assert len(tree_dict["CLI"].keys()) == len(rich_obj.children)
     assert set([list(x.keys())[0] for x in tree_dict["CLI"]["children"]]) == set(
         x.label.renderable.renderables[0].plain.split()[-1] for x in rich_obj.children
     )
@@ -81,13 +81,10 @@ def test_termui_cli():
                 {
                     "locate": {
                         "data": {
-                            "help": "Opens a file or URL In the "
-                                    "default application.",
+                            "help": "Opens a file or URL In the " "default application.",
                             "is_group": False,
                             "name": "locate",
-                            "params": [
-                                {"name": "url", "opts": ["url"], "type": "argument"}
-                            ],
+                            "params": [{"name": "url", "opts": ["url"], "type": "argument"}],
                             "route": ["locate"],
                         }
                     }
@@ -106,13 +103,10 @@ def test_termui_cli():
                 {
                     "open": {
                         "data": {
-                            "help": "Opens a file or URL In the "
-                                    "default application.",
+                            "help": "Opens a file or URL In the " "default application.",
                             "is_group": False,
                             "name": "open",
-                            "params": [
-                                {"name": "url", "opts": ["url"], "type": "argument"}
-                            ],
+                            "params": [{"name": "url", "opts": ["url"], "type": "argument"}],
                             "route": ["open"],
                         }
                     }

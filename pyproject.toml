@@ -8,4 +8,11 @@ author = "Joel Schwarzmann"
 author-email = "joel.l.schw@gmail.com"
 home-page = "https://github.com/datajoely/click-tree-viz/"
 description-file = "README.md"
+requires-python = ">=3.6"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
 
+[tool.black]
+line-length = 100

@@ -30,10 +30,7 @@ def pager():
 
 @cli.command()
 @click.option(
-    "--count",
-    default=8000,
-    type=click.IntRange(1, 100000),
-    help="The number of items to process.",
+    "--count", default=8000, type=click.IntRange(1, 100000), help="The number of items to process.",
 )
 def progress(count):
     """Demonstrates the progress bar."""

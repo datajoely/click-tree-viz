@@ -44,24 +44,17 @@ def _make_rich_renderable(node_id: str, cli_tree: treelib.Tree) -> ConsoleRender
         """This method constructs a simple text panel if no parameters are present"""
 
         text_title = [
-            Text(
-                f"{ICONS.get('group')} {text}",
-                no_wrap=True,
-                overflow="ellipsis",
-                style="bold",
-            )
+            Text(f"{ICONS.get('group')} {text}", no_wrap=True, overflow="ellipsis", style="bold",)
         ]
         text_desc = [Text(desc, overflow="ellipsis", style="italic")] if desc else []
-        return Panel.fit(
-            renderable=RenderGroup(*(text_title + text_desc)), width=PANEL_MAX_WIDTH,
-        )
+        return Panel.fit(renderable=RenderGroup(*(text_title + text_desc)), width=PANEL_MAX_WIDTH,)
 
     def _new_param_tbl(desc: str, text: str, headers: List[str]):
         """This method constructs a table in order to detail parameters """
         return Panel.fit(
             renderable=RenderGroup(
                 Text(text, no_wrap=True, overflow="ellipsis", style="bold"),
-                '\n',
+                "\n",
                 Table(
                     *headers,
                     show_lines=False,
@@ -159,9 +152,7 @@ def _find_or_create_node(
     return rich_tree
 
 
-def build_rich_tree(
-    cli_tree: treelib.Tree, return_obj: bool = False
-) -> Optional[RichTree]:
+def build_rich_tree(cli_tree: treelib.Tree, return_obj: bool = False) -> Optional[RichTree]:
     """
     This method takes a treelib Tree structure constructed by processing the click
     object and then converts this to a richly formatted object that can be printed

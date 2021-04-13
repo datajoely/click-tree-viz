@@ -37,9 +37,7 @@ class ClickTreeViz:
 
         # Convert to treelib.tree.Tree structure
         self._treelib_obj = self._as_tree(node_sequence=self._list_leaf_nodes)
-        self._treelib_obj_params = self._extend_leaf_params(
-            treelib_obj=self._treelib_obj
-        )
+        self._treelib_obj_params = self._extend_leaf_params(treelib_obj=self._treelib_obj)
 
         # Graphviz method provided by treelib yields once only
         self._graphviz_cached = None
@@ -102,9 +100,7 @@ class ClickTreeViz:
         """Uses treelib to convert nodes to a JSON structure"""
         return self._treelib_obj.to_json(with_data=True, **kwargs)
 
-    def to_graphviz(
-        self, shape: str = "plain", layout_dir: str = "LR", **kwargs
-    ) -> str:
+    def to_graphviz(self, shape: str = "plain", layout_dir: str = "LR", **kwargs) -> str:
         """
         This method leverages the treelib graphviz function, but instead of printing
         to the stdout this is captured and returned as a string object. Additionally

@@ -3,7 +3,7 @@ format:
 
 
 lint:
-	$(PYTHON) pylint ./src/
+	$(PYTHON) pylint ./src/click_tree_viz
 
 
 flint: format lint
