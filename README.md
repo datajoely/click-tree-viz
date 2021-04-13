@@ -39,8 +39,8 @@ Render targets available:
 | Method      | Description |
 | ----------- | ----------- |
 | `print()`      | A simple visualisation in the terminal (demonstrated above). |
-| `to_dict()`      | Returns a nested Python dictionary: <br><img src="tests/examples/img/to_dict.png" width=450>|
+| `to_dict()`      | Returns a nested Python dictionary: <br><img src="src/tests/examples/img/to_dict.png" width=450>|
 | `to_json()`   | Returns a JSON string identical to the Python dictionary.       |
-| `to_graph_viz()`   | Returns a `dot` language as a Python string which can be rendered elsewhere: <br><img src="tests/examples/img/to_graphviz.png" width=450>|
-| `rich_print()`   | Utilises the [rich](https://github.com/willmcgugan/rich) library to print a visually appealing tree to the terminal: <br><img src="tests/examples/img/rich_print.png" width=450>|
+| `to_graph_viz()`   | Returns a `dot` language as a Python string which can be rendered elsewhere: <br><img src="src/tests/examples/img/to_graphviz.png" width=450>|
+| `rich_print()`   | Utilises the [rich](https://github.com/willmcgugan/rich) library to print a visually appealing tree to the terminal: <br><img src="src/tests/examples/img/rich_print.png" width=450>|
 
