@@ -1,0 +1,11 @@
+[build-system]
+requires = ["flit_core >=2,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.metadata]
+module = "click_tree_viz"
+author = "Joel Schwarzmann"
+author-email = "joel.l.schw@gmail.com"
+home-page = "https://github.com/datajoely/click-tree-viz/"
+description-file = "README.md"
+
